@@ -14,6 +14,21 @@
     }
 
     $user_data = check_login($conn);
+    $fullname = $user_data['FULLNAME'];
+
+    $query = "select * from users_profile where FULLNAME = '$fullname' limit 1";
+    $result = mysqli_query($conn,$query);
+    $row = mysqli_fetch_assoc($result);
+    $image_data = $row['PROFILE_PIC'];
+
+    if ($image_data) {
+        // Convert the image data into a format that can be displayed in HTML
+        $image_data_base64 = base64_encode($image_data);
+        $image_src = "data:image/jpeg;base64," . $image_data_base64;
+    } else {
+        // Output a local image URL
+        $image_src = "assets\img\user-svgrepo-com.svg";
+    }
 
 ?>
 
@@ -88,15 +103,23 @@
 ================================================== -->
 <div class="container">
 	<div class="row">
-		<div class="col-md-2"></div>
-		<div class="col-md-8 col-md-offset-2">
-			<div class="mainheading">
-				<div class="row post-top-meta authorpage">
-					<div class="col-md-10 col-xs-12">
-						<h1><?php echo "{$user_data["FULLNAME"]}" ?></h1>
-
-						<div class="description container">
-                        <?php
+        <div class="col-12">
+        <section class="col-12">
+                    <div class="container col-12">
+                        <h1 class="text-center">Profile</h1>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="col-md-10 profile-card card rounded-lg shadow p-4 p-xl-5 mb-4 text-center position-relative overflow-hidden" style="margin:auto;">
+                                    <div class="banner col-md-10 "></div>
+                                    <img src="assets\img\user-svgrepo-com.svg" alt="" class="img-circle mx-auto mb-3" style ="width:100px; height:100px;">
+                                    <h3 class="mb-4"><?php echo "{$user_data['FULLNAME']}" ?> </h3>
+                                    <div class="text-left mb-4">
+                                        <p class="mb-2"><i class="fa fa-envelope mr-2"></i> <?php echo "{$user_data['EMAIL']}" ?></p>
+                                        <p class="mb-2"><i class="fa fa-phone mr-2"></i> <?php echo "{$user_data['PHONENUMBER']}" ?></p>
+                                        <p class="mb-2"><i class="fa fa-globe mr-2"></i> kiranworkspace.com</p>
+                                        <p class="mb-2"><i class="fa fa-map-marker-alt mr-2"></i> <?php
                             // Check if the "Edit" button was clicked
                             if (isset($_GET['edit'])) {
                                 // Show the form
@@ -117,19 +140,21 @@
                                 }
                                 
                             }
-                            ?> 
-
-                        
+                            ?> </p>
+                                    </div>
+                                    <div class="social-links d-flex justify-content-center">
+                                        <a href="#!" class="mx-2"><img src="img/social/dribbble.svg" alt="Dribbble"></a>
+                                        <a href="#!" class="mx-2"><img src="img/social/facebook.svg" alt="Facebook"></a>
+                                        <a href="#!" class="mx-2"><img src="img/social/linkedin.svg" alt="Linkedin"></a>
+                                        <a href="#!" class="mx-2"><img src="img/social/youtube.svg" alt="Youtube"></a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-						<div class="sociallinks"><a  target="_blank" href="https://www.facebook.com/wowthemesnet/"><i class="fa fa-facebook"></i></a> <span class="dot"></span> <a target="_blank" href="https://plus.google.com/s/wowthemesnet/top"><i class="fa fa-google-plus"></i></a></div>
-						<a target="_blank" href="https://twitter.com/wowthemesnet" class="btn follow">Follow</a>
-					</div>
-					<div class="col-md-2 col-xs-12">
-						<img class="author-thumb" src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x" alt="Sal">
-					</div>
-				</div>
-			</div>
-		</div>
+
+                    </div>
+                </section>
+            </div>
 	</div>
 </div>
 <!-- End Top Author Meta
