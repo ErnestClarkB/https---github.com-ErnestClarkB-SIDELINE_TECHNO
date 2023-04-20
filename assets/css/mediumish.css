@@ -411,11 +411,14 @@ blockquote {
 }
 
 .card-title h2{
-color: #243863
+color: #243863;
 font-size: 18px; 
-
 }
-	
+
+.inline {
+    display: inline-block;
+    margin-right: 10px;
+}
 
 .card .img-thumb {
 	border-top-right-radius:4px;

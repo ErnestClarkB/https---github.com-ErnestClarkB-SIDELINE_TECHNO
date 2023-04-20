@@ -30,6 +30,35 @@
         $image_src = "assets\img\user-svgrepo-com.svg";
     }
 
+    if (isset($_POST['logout'])) {
+        // destroy the session
+        session_destroy();
+    
+        // redirect the user to the login page
+        header("Location: login.php");
+        exit;
+    }
+
+    if (isset($_POST['edit_description'])) {
+        // destroy the session
+        $new_description = $_POST['description'];
+
+        // Prepare an SQL statement to update the description column
+        $sql = "UPDATE `users_profile` SET `DESCRIPTION`='$new_description' WHERE FULLNAME = '$fullname'";
+
+        // Execute the SQL statement
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            // If the update was successful, display a success message
+            $description = $new_description;
+        } else {
+            // If the update failed, display an error message
+            echo "Error updating description: " . mysqli_error($conn);
+        }
+        
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +112,7 @@
 				</li>
 	
 				<li class="nav-item">
-					<a class="nav-link" href="logout.php">Logout</a>
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
 					</li>
 			</ul>
 			<!-- End Menu -->
@@ -115,32 +144,38 @@
                                     <div class="banner col-md-10 "></div>
                                     <img src="assets\img\user-svgrepo-com.svg" alt="" class="img-circle mx-auto mb-3" style ="width:100px; height:100px;">
                                     <h3 class="mb-4"><?php echo "{$user_data['FULLNAME']}" ?> </h3>
-                                    <div class="text-left mb-4">
-                                        <p class="mb-2"><i class="fa fa-envelope mr-2"></i> <?php echo "{$user_data['EMAIL']}" ?></p>
-                                        <p class="mb-2"><i class="fa fa-phone mr-2"></i> <?php echo "{$user_data['PHONENUMBER']}" ?></p>
-                                        <p class="mb-2"><i class="fa fa-globe mr-2"></i> kiranworkspace.com</p>
-                                        <p class="mb-2"><i class="fa fa-map-marker-alt mr-2"></i> <?php
+                                    <div class="text-center mb-4">
+                                        <p class="mb-2 inline"><i class="fa fa-envelope mr-2"></i> <?php echo "{$user_data['EMAIL']}" ?></p>
+                                        <p class="mb-2 inline"><i class="fa fa-phone mr-2"></i> <?php echo "{$user_data['PHONENUMBER']}" ?></p>
+                                        <div class="user_description" 
+                                        style ="
+                                                background: #6FC49B;
+                                                padding:10px;
+                                                border-radius:20px;
+
+                                            "><?php
                             // Check if the "Edit" button was clicked
                             if (isset($_GET['edit'])) {
                                 // Show the form
-                                echo '<h1>Edit Form</h1>';
-                                echo '<form method="post" action="process.php">';
+                                echo '<form method="post" action="account.php">';
                                 echo '<label for="description">Description:</label><br>';
-                                echo '<input type="text" id="description" name="description"><br>';
-                                echo '<input type="submit" name = "edit_description" value="Submit">';
+                                echo '<textarea style="width:80%;margin:20px 20px;"rows="5" id="description" name="description"></textarea><br>';
+                                echo '<input type="submit" name="edit_description" value="Submit">';
                                 echo '</form>';
+                                
                             } else {
                                 // Show the "Edit" button
                                 if(isset($description)){
-                                    echo "<span class='author-description'>{$description}/span>";
-                                     echo '<a href="?edit">Edit</a>';
+                                    echo "<h5> Description: </h5>";
+                                    echo "<span style='font-size: 20px;'class='author-description'>{$description}</span><br>";
+                                    echo '<a style ="font-size:10px;"  href="?edit">Edit</a>';
                                 }else{
                                     echo '<span class="author-description">No description yet</span>';
-                                    echo '<a href="?edit">Edit</a>';
+                                    echo '<a class = "edit_des" href="?edit">Edit</a>';
                                 }
                                 
                             }
-                            ?> </p>
+                            ?> </div>
                                     </div>
                                     <div class="social-links d-flex justify-content-center">
                                         <a href="#!" class="mx-2"><img src="img/social/dribbble.svg" alt="Dribbble"></a>
@@ -175,6 +210,27 @@
 </div>
 <!-- End Twitter Timeline
 ================================================== -->
+
+<div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true" style = "" >
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4>Log Out <i class="fa fa-lock"></i></h4>
+      </div>
+      <div class="modal-body">
+        <p><i class="fa fa-question-circle"></i> Are you sure you want to log-off? <br /></p>
+        <div class="actionsBtns">
+            <form action="account.php" method="POST">
+                <input type="hidden" name="logout" value="1">
+                <button type="submit" class="btn red lighten-2" style ="color:#fff;">Logout</button>
+                <a href="#!" class="btn modal-close" style ="color:#fff;">Cancel</a>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Begin Footer
 ================================================== -->

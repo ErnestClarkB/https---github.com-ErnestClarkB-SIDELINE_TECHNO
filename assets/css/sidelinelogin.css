@@ -5,6 +5,7 @@
     font-family:Verdana;
 }
 
+
 .card{
     margin: auto;
 }
@@ -17,7 +18,15 @@ body{
     background: #243863;
     background-size: cover;
 }
-
+.user-description{
+    text-align: center;
+    width: 100%;
+    align-items: center;
+    background-color: aliceblue;
+}
+.edit_des{
+    font-size: small;
+}
 .containerregister{
     max-width: 500px;
     height: fit-content;
