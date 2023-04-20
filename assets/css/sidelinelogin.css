@@ -1,0 +1,204 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:Verdana;
+}
+
+body{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: #243863;
+    background-size: cover;
+}
+
+.containerregister{
+    max-width: 500px;
+    height: fit-content;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    padding-bottom: 5px;
+}
+
+.containerlogin{
+    max-width: 300px;
+    height: fit-content;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    padding-bottom: 5px;
+}
+
+.form-title{
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    padding-bottom: 6px;
+    color: white;
+    border-bottom: solid 1px white;
+}
+
+.main-user-info{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px 5px;
+}
+
+.user-input-box:nth-child(2n){
+    justify-content: end;
+}
+
+.user-input-box{
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    padding-bottom: 5px;
+}
+
+.user-input-box label{
+    width: 95%;
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    font-weight: 200;
+    margin: 5px 0;
+}
+
+.user-input-box input{
+    height: 30px;
+    width: 95%;
+    border-radius: 7px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.226); 
+    border: 1px solid rgb(255, 255, 255);
+    padding: 5px 10px;
+    color: #fff;
+    font-size: 12px;
+}
+
+.forgot_pass a{
+    font-size: 10px; 
+}
+
+.user-input-box input:label{
+    color: white; 
+    font-size: 12px; 
+
+}
+
+::placeholder{
+    color: #fff;
+    font-family: Arial;
+    font-size: 12px;
+}
+
+.gender-title{
+    color:white;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0%;
+    padding: 0%;
+}
+
+.gender-category{
+    margin: 15px 0;
+    color: white;
+    font-size: 12px;
+    margin: 0%;
+    padding: 0%;
+}
+
+.gender-category label{
+    padding: 0 20px 0 0px;
+}
+
+.gender-category label,
+.gender-category input,
+.form-submit-btn input{
+    cursor: pointer;
+}
+
+.form-submit-btn{
+    margin-top: 5px;
+    width:100%; 
+}
+
+.form-submit-btn input{
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    font-size: 12px;
+    padding: 5px;
+    border:none;
+    border-radius: 3px;
+    color: rgb(209, 209, 209);
+    background: rgba(63, 114, 76, 0.7);
+}
+
+.form-submit-btn input:hover{
+    background: rgba(56, 204, 93, 0.7);
+    color: rgb(255, 255, 255);
+}
+
+
+.formalready{
+    font-size: 7px;
+    color: white;
+    margin: 0px;
+    padding-top: 10px;
+    text-align: center;
+
+}
+
+.forgot_pass{
+    font-size: 7px;
+    color: white;
+    margin: 0px;
+    padding-top: 5px;
+    text-align: center;
+
+
+}
+.formalready a{
+    font-size: 10px;
+    color: lightblue;
+}
+
+
+@media(max-width: 600px){
+    .containerregister{
+        min-width: 280px;
+    }
+
+    .containerlogin{
+        min-width: 280px;
+    }
+
+    .user-input-box{
+        margin-bottom: 12px;
+        width: 100%;
+    }
+
+    .user-input-box:nth-child(2n){
+        justify-content: space-between;
+    }
+
+    .gender-category{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .main-user-info{
+        max-height: 380px;
+        overflow: auto;
+    }
+
+    .main-user-info::-webkit-scrollbar{
+        width: 0;
+    }
+    
+}
