@@ -38,10 +38,10 @@
           } else {
             $sql = "INSERT INTO users_sideline (FULLNAME, USERNAME, PHONENUMBER,EMAIL,PASSWORD,GENDER)
             VALUES ('$fullname', '$username', '$phonenumber','$email','$password','$gender')";
-            $sql = "INSERT INTO users_profile (FULLNAME)
+            $sql2 = "INSERT INTO users_profile (FULLNAME)
             VALUES ('$fullname')";
 
-            if ($conn->query($sql) === TRUE) {
+            if ($conn->query($sql) === TRUE && $conn->query($sql2)) {
                 echo "Registration successful!";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;

@@ -23,6 +23,9 @@
     $description = $row['DESCRIPTION'];
     $email = $user_data['EMAIL'];
     $phonenumber = $user_data['PHONENUMBER'];
+    $profile_pic = $row['PROFILE_PIC'];
+
+
 
     if ($image_data) {
         // Convert the image data into a format that can be displayed in HTML
@@ -86,6 +89,33 @@
         }
     }
 
+    if(isset($_POST['edit_picture']))
+    {       
+        try {
+ 
+            $new_profile_pic = addslashes(file_get_contents($_FILES['profile']['tmp_name']));
+            $sqlpic = "UPDATE `users_profile` SET `PROFILE_PIC`='$new_profile_pic'";
+            $result = mysqli_query($conn, $sqlpic);
+            if ($result) {
+                // If the update was successful, display a success message
+                $profile_pic = $new_profile_pic;
+                
+                header("Location: account.php?update=email and phone");
+                exit;
+            } else {
+                // If the update failed, display an error message
+                header("Location: account.php?error=profile");
+                exit;
+            }
+            
+        } catch (mysqli_sql_exception $e) {
+            // Handle the specific error here
+                $error = $e->getMessage();
+                echo "<script>alert('File too large');</script>";
+            
+        }
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -103,6 +133,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="assets/css/mediumish.css" rel="stylesheet">
+<link href="assets/css/profile.css" rel="stylesheet">
 </head>
 <body>
 
@@ -167,8 +198,37 @@
                             <div class="col-12">
                                 <div class="col-md-10 profile-card card rounded-lg shadow p-4 p-xl-5 mb-4 text-center position-relative overflow-hidden" style="margin:auto;">
                                     <div class="banner col-md-10 "></div>
-                                    <img src="assets\img\user-svgrepo-com.svg" alt="" class="img-circle mx-auto mb-3" style ="width:100px; height:100px;">
-                                    <h3 class="mb-4"><?php echo "{$user_data['FULLNAME']}" ?> </h3>
+                                    
+                                    <?php if (isset($_GET['edit_picture'])) { ?>
+                                        <!-- Show the form -->
+                                        <div class="profile_container">
+                                            <img id="profile" src="data:image/jpeg;base64,<?= base64_encode($profile_pic) ?>" alt="" class="img-circle mx-auto mb-3 img-fluid img-cover" style="width:100px; height:100px;">
+                                            
+                                        <form method="post" action="account.php" enctype="multipart/form-data">
+                                            <input type="file" id="choose" placeholder="choose profile" name="profile">
+                                            <label for ="choose" >Choose Picture</label>
+                                            <input type="submit" name="edit_picture" value="UPLOAD">
+                                        </form>
+                                        </div>
+                                    <?php } else { ?>
+                                        <?php if (isset($profile_pic)) { ?>
+                                            <!-- Show the profile picture -->
+                                            <div class="profile_container">
+                                                <img id="profile" src="data:image/jpeg;base64,<?= base64_encode($profile_pic) ?>" alt="" class="img-circle mx-auto mb-3 img-fluid img-cover" style="width:100px; height:100px;">
+                                                <a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_picture"> <i class="fa fa-pencil"></i></a>
+                                            </div>
+  
+                                            </p>
+                                        <?php } else { ?>
+                                            <!-- Show a default profile picture -->
+                                            <div class="profile_container">
+                                                <img id="profile" src="assets\img\user-svgrepo-com.svg" alt="" class="img-circle mx-auto mb-3 img-fluid img-cover" style="width:100px; height:100px;">
+                                                </div>
+                                                <a class="float-left mr-4 mb-10" style="font-size:10px;" href="?edit_picture"> upload</i></a<i class=" fa fa-pencil"></i>br> 
+                                        <?php } ?>
+                                    <?php } ?>
+                                    <hr class="border">
+                                    <h3 class="profile-name mb-4"><?php echo "{$user_data['FULLNAME']}" ?> </h3>
                                     <div class="text-center mb-4">
                                         <hr class="border">
                                         <div>
@@ -190,7 +250,7 @@
                                                     echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_contact"> <i class="fa fa-pencil"></i></a><br>';
                                                 }else{
                                                         echo '<span class="author-description">No description yet</span>';
-                                                        echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_contact"> <i class="fa fa-pencil"></i></a><br>';
+                                                        echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_picture"> <i class="fa fa-pencil"></i></a><br>';
                                                     }
 
                                                 }
