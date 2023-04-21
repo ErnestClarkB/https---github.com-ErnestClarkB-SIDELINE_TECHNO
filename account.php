@@ -19,7 +19,10 @@
     $query = "select * from users_profile where FULLNAME = '$fullname' limit 1";
     $result = mysqli_query($conn,$query);
     $row = mysqli_fetch_assoc($result);
-    $image_data = $row['PROFILE_PIC'];
+    $image_data = $row['PROFILE_PIC'];  
+    $description = $row['DESCRIPTION'];
+    $email = $user_data['EMAIL'];
+    $phonenumber = $user_data['PHONENUMBER'];
 
     if ($image_data) {
         // Convert the image data into a format that can be displayed in HTML
@@ -57,6 +60,30 @@
             echo "Error updating description: " . mysqli_error($conn);
         }
         
+    }
+
+    if (isset($_POST['edit_contact'])) {
+        // destroy the session
+        $new_phonenumber = $_POST['number'];
+        $new_email = $_POST['email'];
+
+        // Prepare an SQL statement to update the description column
+        $sql = "UPDATE `users_sideline` SET `PHONENUMBER`='$new_phonenumber',`EMAIL`='$new_email' WHERE FULLNAME = '$fullname'";
+
+        // Execute the SQL statement
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            // If the update was successful, display a success message
+            $phonenumber = $new_phonenumber;
+            $email = $new_email;
+
+            header("Location: account.php?update=email and phone ");
+            exit;
+        } else {
+            // If the update failed, display an error message
+            echo "Error updating description: " . mysqli_error($conn);
+        }
     }
 
 ?>
@@ -135,8 +162,6 @@
         <div class="col-12">
         <section class="col-12">
                     <div class="container col-12">
-                        <h1 class="text-center">Profile</h1>
-                        <br>
                         <br>
                         <div class="row">
                             <div class="col-12">
@@ -145,11 +170,36 @@
                                     <img src="assets\img\user-svgrepo-com.svg" alt="" class="img-circle mx-auto mb-3" style ="width:100px; height:100px;">
                                     <h3 class="mb-4"><?php echo "{$user_data['FULLNAME']}" ?> </h3>
                                     <div class="text-center mb-4">
-                                        <p class="mb-2 inline"><i class="fa fa-envelope mr-2"></i> <?php echo "{$user_data['EMAIL']}" ?></p>
-                                        <p class="mb-2 inline"><i class="fa fa-phone mr-2"></i> <?php echo "{$user_data['PHONENUMBER']}" ?></p>
+                                        <hr class="border">
+                                        <div>
+                                            <?php
+                                                if (isset($_GET['edit_contact'])) 
+                                                {
+                                                    // Show the form
+                                                    echo "<form method='post' action='account.php'>";
+                                                    echo "<input type='email' placeholder='email' name='email'>";
+                                                    echo "<input type='number' placeholder='number' name='number'>";
+                                                    echo "<input type='submit' name='edit_contact' value='edit'>";
+                                                    echo '</form>';
+                                                    
+                                                } else {
+                                                    if(isset($user_data['EMAIL']) && $user_data['PHONENUMBER']){
+                                                    echo "<p class='inline border-left border-right' style='display: inline-block; margin:10px'><i class='fa fa-envelope'></i> {$user_data['EMAIL']}</p>";
+                                                    echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_contact" > <i class="fa fa-pencil"></i></a><br>';
+                                                    echo "<p class='inline' style='display: inline-block; margin:10px'><i class='fa fa-phone '></i> {$user_data['PHONENUMBER']}</p>";
+                                                    echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_contact"> <i class="fa fa-pencil"></i></a><br>';
+                                                }else{
+                                                        echo '<span class="author-description">No description yet</span>';
+                                                        echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit_contact"> <i class="fa fa-pencil"></i></a><br>';
+                                                    }
+
+                                                }
+                                            ?>
+                                        </div>
+                                        <hr class="border">
                                         <div class="user_description" 
                                         style ="
-                                                background: #6FC49B;
+                                                background: #E4DCCF;
                                                 padding:10px;
                                                 border-radius:20px;
 
@@ -158,7 +208,7 @@
                             if (isset($_GET['edit'])) {
                                 // Show the form
                                 echo '<form method="post" action="account.php">';
-                                echo '<label for="description">Description:</label><br>';
+                                echo '<label for="description" style="text-align:left;">About Me:</label><br>';
                                 echo '<textarea style="width:80%;margin:20px 20px;"rows="5" id="description" name="description"></textarea><br>';
                                 echo '<input type="submit" name="edit_description" value="Submit">';
                                 echo '</form>';
@@ -166,24 +216,16 @@
                             } else {
                                 // Show the "Edit" button
                                 if(isset($description)){
-                                    echo "<h5> Description: </h5>";
-                                    echo "<span style='font-size: 20px;'class='author-description'>{$description}</span><br>";
-                                    echo '<a style ="font-size:10px;"  href="?edit">Edit</a>';
+                                    echo "<p> About Me: </p>";
+                                    echo "<span style='font-size: 20px;'class='author-description font-italic'>{$description}</span><br>";
+                                    echo '<a class="float-right mr-4 mb-10" style ="font-size:10px;"  href="?edit">Edit <i class="fa fa-pencil"></i></a><br>';
                                 }else{
                                     echo '<span class="author-description">No description yet</span>';
-                                    echo '<a class = "edit_des" href="?edit">Edit</a>';
+                                    echo '<a class = "edit_des" href="?edit">Edit</a><br>';
                                 }
                                 
                             }
                             ?> </div>
-                                    </div>
-                                    <div class="social-links d-flex justify-content-center">
-                                        <a href="#!" class="mx-2"><img src="img/social/dribbble.svg" alt="Dribbble"></a>
-                                        <a href="#!" class="mx-2"><img src="img/social/facebook.svg" alt="Facebook"></a>
-                                        <a href="#!" class="mx-2"><img src="img/social/linkedin.svg" alt="Linkedin"></a>
-                                        <a href="#!" class="mx-2"><img src="img/social/youtube.svg" alt="Youtube"></a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
